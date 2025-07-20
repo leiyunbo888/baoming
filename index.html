@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>浙江大学研学营报名查询系统</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4edf5 100%);
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            padding: 30px 0;
+            margin-bottom: 30px;
+            background: linear-gradient(to right, #0056b3, #003d82);
+            color: white;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0, 86, 179, 0.2);
+        }
+        
+        .logo-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 15px;
+        }
+        
+        .logo {
+            font-size: 3.5rem;
+            color: #fff;
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+        }
+        
+        h1 {
+            font-size: 2.8rem;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        
+        .subtitle {
+            font-size: 1.4rem;
+            opacity: 0.9;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .search-section {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+            margin-bottom: 40px;
+        }
+        
+        .search-box {
+            display: flex;
+            max-width: 700px;
+            margin: 0 auto;
+            gap: 15px;
+        }
+        
+        .search-input {
+            flex: 1;
+            padding: 16px 20px;
+            border: 2px solid #e0e6ed;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            transition: all 0.3s;
+        }
+        
+        .search-input:focus {
+            border-color: #0056b3;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(0, 86, 179, 0.2);
+        }
+        
+        .search-btn {
+            background: linear-gradient(to right, #0056b3, #003d82);
+            color: white;
+            border: none;
+            padding: 0 35px;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 10px rgba(0, 86, 179, 0.3);
+        }
+        
+        .search-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(0, 86, 179, 0.4);
+        }
+        
+        .search-btn:active {
+            transform: translateY(0);
+        }
+        
+        .search-tips {
+            text-align: center;
+            margin-top: 20px;
+            color: #666;
+            font-size: 0.95rem;
+        }
+        
+        .result-section {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+            margin-bottom: 40px;
+            min-height: 200px;
+        }
+        
+        .result-title {
+            font-size: 1.6rem;
+            margin-bottom: 25px;
+            color: #003d82;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .result-container {
+            display: none;
+        }
+        
+        .result-card {
+            background: #f8fbff;
+            border: 1px solid #e0edff;
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 20px;
+            transition: transform 0.3s;
+        }
+        
+        .result-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 86, 179, 0.1);
+        }
+        
+        .info-row {
+            display: flex;
+            margin-bottom: 12px;
+        }
+        
+        .info-label {
+            font-weight: 600;
+            min-width: 100px;
+            color: #0056b3;
+        }
+        
+        .no-result {
+            text-align: center;
+            padding: 40px 20px;
+            color: #666;
+        }
+        
+        .faq-section {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+        }
+        
+        .faq-title {
+            font-size: 1.8rem;
+            margin-bottom: 25px;
+            color: #003d82;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .faq-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+        }
+        
+        .faq-item {
+            background: #f8fbff;
+            border-radius: 10px;
+            padding: 20px;
+            border: 1px solid #e0edff;
+        }
+        
+        .faq-question {
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: #0056b3;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .faq-answer {
+            color: #555;
+            line-height: 1.7;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 30px 0;
+            margin-top: 40px;
+            color: #666;
+            font-size: 0.95rem;
+        }
+        
+        @media (max-width: 768px) {
+            .search-box {
+                flex-direction: column;
+            }
+            
+            .search-btn {
+                padding: 16px;
+            }
+            
+            h1 {
+                font-size: 2.2rem;
+            }
+            
+            .subtitle {
+                font-size: 1.1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo-container">
+                <i class="fas fa-university logo"></i>
+                <div>
+                    <h1>浙江大学研学营报名查询系统</h1>
+                    <div class="subtitle">输入姓名或手机号查询您的研学营报名信息</div>
+                </div>
+            </div>
+        </header>
+        
+        <section class="search-section">
+            <div class="search-box">
+                <input type="text" class="search-input" id="searchInput" placeholder="请输入姓名或手机号码">
+                <button class="search-btn" id="searchBtn">
+                    <i class="fas fa-search"></i> 查询报名信息
+                </button>
+            </div>
+            <div class="search-tips">
+                提示：您可以通过姓名或手机号查询报名状态。手机号需输入完整11位号码。
+            </div>
+        </section>
+        
+        <section class="result-section">
+            <h2 class="result-title"><i class="fas fa-file-alt"></i> 查询结果</h2>
+            <div class="result-container" id="resultContainer">
+                <!-- 动态填充查询结果 -->
+            </div>
+            <div class="no-result" id="noResult">
+                <i class="fas fa-info-circle" style="font-size: 3rem; margin-bottom: 15px; color: #ccc;"></i>
+                <p>请输入姓名或手机号查询报名信息</p>
+            </div>
+        </section>
+        
+        <section class="faq-section">
+            <h2 class="faq-title"><i class="fas fa-question-circle"></i> 常见问题解答</h2>
+            <div class="faq-container">
+                <div class="faq-item">
+                    <div class="faq-question"><i class="fas fa-q"></i> 导出了多媒体内容，为什么在表格中打不开?</div>
+                    <div class="faq-answer">在表格中打开多媒体内容是通过链接方式打开的，如果你将多媒体子文件夹或者子文件夹中的图片挪出了导出的文件夹，表格会找不到图片的打开路径，所以打不开内容。将图片挪回文件夹即可打开。</div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question"><i class="fas fa-q"></i> 填表人姓名里的手机号为什么中间打星号？</div>
+                    <div class="faq-answer">填写的表单中没有手机号和姓名组件，所以系统以手机号隐去四位的方式。由于涉及用户隐私信息不能显示全手机号。你可以在表单中添加手机号和姓名组件。</div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question"><i class="fas fa-q"></i> 用Excel工具打开.csv文件显示乱码？</div>
+                    <div class="faq-answer">用Excel打开.csv文件显示乱码是由于Excel的默认编码格式和.csv文件的编码格式不同造成的。可以将.csv文件用记事本打开后选择另存为。保存类型选择"所有文件"，编码格式选择"带有BOM的UTF-8"，点击保存。之后再用Excel打开即可。</div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question"><i class="fas fa-q"></i> 如何导出二维码的正文内容？</div>
+                    <div class="faq-answer">暂时不支持导出通过单个生成的二维码的正文内容。如果是批量生成的子码，可以同时导出子码的可变内容，固定内容暂不支持导出。可在批量模板详情页导出数据时勾选需要导出的数据。</div>
+                </div>
+            </div>
+        </section>
+        
+        <footer>
+            <p>浙江大学研学营管理办公室 © 2025 | 服务热线: 0571-8820XXXX</p>
+            <p>本系统仅用于查询研学营报名信息，所有数据均已做隐私保护处理</p>
+        </footer>
+    </div>
+
+    <script>
+        // 报名数据
+        const enrollmentData = [
+            { name: '吕泽锋', phone: '13600761945', course: '浙江大学8月8日研学营' },
+            { name: '李潇杭', phone: '13960222473', course: '浙江大学8月8日研学营' },
+            { name: '黄晓煜', phone: '15959989739', course: '浙江大学8月8日研学营' },
+            { name: '陈雨珊', phone: '13338590668', course: '浙江大学8月8日研学营' },
+            { name: '郭思扬', phone: '13599292446', course: '浙江大学8月8日研学营' },
+            { name: '江奕楷', phone: '13030988768', course: '浙江大学8月8日研学营' },
+            { name: '许家乐', phone: '15060980222', course: '浙江大学8月8日研学营' },
+            { name: '苏释玄', phone: '13506050012', course: '浙江大学8月8日研学营' },
+            { name: '陈佳淼', phone: '18659477155', course: '浙江大学8月8日研学营' },
+            { name: '苏嘉鑫', phone: '15159779279', course: '浙江大学8月8日研学营' },
+            { name: '黄新颖', phone: '13506079379', course: '浙江大学8月8日研学营' },
+            { name: '柯希焱', phone: '13960370721', course: '浙江大学8月8日研学营' },
+            { name: '郭洁莹', phone: '13799570844', course: '浙江大学8月8日研学营' },
+            { name: '庄卓涵', phone: '18965702955', course: '浙江大学8月8日研学营' },
+            { name: '杨一凌', phone: '13600779305', course: '浙江大学8月8日研学营' },
+            { name: '陈诗莹', phone: '15160356121', course: '浙江大学8月8日研学营' },
+            { name: '江骏川', phone: '13505974794', course: '浙江大学8月8日研学营' },
+            { name: '杨恒益', phone: '18959879702', course: '浙江大学8月8日研学营' },
+            { name: '熊若琳', phone: '15160353515', course: '浙江大学8月8日研学营' },
+            { name: '许楚怡', phone: '18759980634', course: '浙江大学8月8日研学营' },
+            { name: '许佳麦', phone: '13505074056', course: '浙江大学8月8日研学营' },
+            { name: '刘先毅', phone: '13055952686', course: '浙江大学8月8日研学营' },
+            { name: '陈宇浩', phone: '15905000283', course: '浙江大学8月8日研学营' },
+            { name: '吴楚榕', phone: '17805933739', course: '浙江大学8月8日研学营' },
+            { name: '王小宇', phone: '15359531392', course: '浙江大学8月8日研学营' },
+            { name: '吴梓鑫', phone: '19959695681', course: '浙江大学8月8日研学营' },
+            { name: '何嘉森', phone: '15159756120', course: '浙江大学8月8日研学营' },
+            { name: '黄睿垚', phone: '18906995133', course: '浙江大学8月8日研学营' },
+            { name: '郭建溶', phone: '13599119962', course: '浙江大学8月8日研学营' },
+            { name: '吴咏茂', phone: '13459355957', course: '浙江大学8月8日研学营' },
+            { name: '雷意', phone: '15060951243', course: '浙江大学8月8日研学营' },
+            { name: '林以涵', phone: '13959772636', course: '浙江大学8月8日研学营' },
+            { name: '黄阳腾', phone: '15359476197', course: '浙江大学8月8日研学营' },
+            { name: '姚子恒', phone: '13365952063', course: '浙江大学8月8日研学营' },
+            { name: '谢宜衡', phone: '13665993002', course: '浙江大学8月8日研学营' },
+            { name: '曾滢莹', phone: '13338568178', course: '浙江大学8月8日研学营' },
+            { name: '孙潇帆', phone: '13506075600', course: '浙江大学8月8日研学营' },
+            { name: '杨松毓', phone: '13859709898', course: '浙江大学8月8日研学营' },
+            { name: '郑诗颖', phone: '15880807080', course: '浙江大学8月8日研学营' },
+            { name: '许越瑶', phone: '15559186892', course: '浙江大学8月8日研学营' },
+            { name: '张宇涛', phone: '18359828185', course: '浙江大学8月8日研学营' },
+            { name: '黄鑫', phone: '18859548868', course: '浙江大学8月8日研学营' },
+            { name: '吴炫睿', phone: '18965602626', course: '浙江大学8月8日研学营' },
+            { name: '庄浩洋', phone: '13905073499', course: '浙江大学8月8日研学营' },
+            { name: '陈静熙', phone: '15396527985', course: '浙江大学8月8日研学营' },
+            { name: '王炜杰', phone: '13960378341', course: '浙江大学8月8日研学营' },
+            { name: '陈珊妮', phone: '13959761885', course: '浙江大学8月8日研学营' },
+            { name: '苏启航', phone: '15060881488', course: '浙江大学8月8日研学营' },
+            { name: '刘杰烽', phone: '15906015281', course: '浙江大学8月8日研学营' },
+            { name: '王之恒', phone: '18750602013', course: '浙江大学8月8日研学营' },
+            { name: '张欣怡', phone: '18065599856', course: '浙江大学8月8日研学营' },
+            { name: '陈莹颖', phone: '', course: '浙江大学8月8日研学营' },
+            { name: '朱柏锴', phone: '15392213139', course: '浙江大学8月8日研学营' },
+            { name: '蒋语韩', phone: '13163933936', course: '浙江大学8月8日研学营' }
+        ];
+
+        // DOM元素
+        const searchInput = document.getElementById('searchInput');
+        const searchBtn = document.getElementById('searchBtn');
+        const resultContainer = document.getElementById('resultContainer');
+        const noResult = document.getElementById('noResult');
+
+        // 搜索功能
+        function searchEnrollment() {
+            const searchTerm = searchInput.value.trim();
+            
+            if (!searchTerm) {
+                alert('请输入姓名或手机号进行查询');
+                return;
+            }
+            
+            // 搜索匹配项
+            const results = enrollmentData.filter(item => 
+                item.name.includes(searchTerm) || 
+                item.phone.includes(searchTerm)
+            );
+            
+            displayResults(results);
+        }
+
+        // 显示结果
+        function displayResults(results) {
+            resultContainer.innerHTML = '';
+            
+            if (results.length === 0) {
+                noResult.innerHTML = `
+                    <i class="fas fa-exclamation-triangle" style="font-size: 3rem; margin-bottom: 15px; color: #ff6b6b;"></i>
+                    <p>未找到匹配的报名信息，请检查输入是否正确</p>
+                    <p style="margin-top: 10px; font-size: 0.9rem;">提示：请尝试输入姓名全称或完整手机号</p>
+                `;
+                noResult.style.display = 'block';
+                return;
+            }
+            
+            noResult.style.display = 'none';
+            
+            results.forEach(item => {
+                const resultCard = document.createElement('div');
+                resultCard.className = 'result-card';
+                
+                resultCard.innerHTML = `
+                    <div class="info-row">
+                        <div class="info-label">姓名：</div>
+                        <div>${item.name}</div>
+                    </div>
+                    <div class="info-row">
+                        <div class="info-label">手机号：</div>
+                        <div>${item.phone || '未提供手机号'}</div>
+                    </div>
+                    <div class="info-row">
+                        <div class="info-label">研学营：</div>
+                        <div>${item.course}</div>
+                    </div>
+                    <div class="info-row">
+                        <div class="info-label">状态：</div>
+                        <div><span style="color: #28a745; font-weight: 600;">报名成功</span> (已确认)</div>
+                    </div>
+                `;
+                
+                resultContainer.appendChild(resultCard);
+            });
+            
+            resultContainer.style.display = 'block';
+        }
+
+        // 事件监听
+        searchBtn.addEventListener('click', searchEnrollment);
+        
+        searchInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                searchEnrollment();
+            }
+        });
+    </script>
+</body>
+</html>
